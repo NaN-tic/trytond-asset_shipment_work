@@ -1,0 +1,11 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:asset,shipments:"
+msgid "Shipments Works"
+msgstr "Albarans de treball"
+
+msgctxt "field:shipment.work,asset:"
+msgid "Asset"
+msgstr "Actiu"
