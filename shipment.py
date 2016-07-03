@@ -2,20 +2,25 @@
 # The COPYRIGHT file at the top level of this repository contains
 # the full copyright notices and license terms.
 from trytond.model import fields
-from trytond.pool import PoolMeta
-from trytond.pyson import Eval, If, Bool
+from trytond.pool import Pool, PoolMeta
+from trytond.pyson import Eval
 
 
 class ShipmentWork:
     __name__ = 'shipment.work'
     __metaclass__ = PoolMeta
-    asset = fields.Many2One('asset', 'Asset',
-            domain=[
-                If(Bool(Eval('party')),
-                    [('owner', '=', Eval('party'))],
-                    []),
-                ],
-            depends=['party'])
+    asset = fields.Many2One('asset', 'Asset')
+
+    @classmethod
+    def __setup__(cls):
+        super(ShipmentWork, cls).__setup__()
+        pool = Pool()
+        Asset = pool.get('asset')
+        if hasattr(Asset, 'owners'):
+            cls.asset.domain = [
+                ('owners.owner', '=', Eval('party')),
+                ]
+            cls.asset.depends.append('party')
 
     @fields.depends('asset', 'employees')
     def on_change_asset(self):
