@@ -9,7 +9,11 @@ from trytond.pyson import Eval
 class ShipmentWork:
     __name__ = 'shipment.work'
     __metaclass__ = PoolMeta
-    asset = fields.Many2One('asset', 'Asset')
+    asset = fields.Many2One('asset', 'Asset',
+        states={
+            'readonly': Eval('state') != 'draft',
+            },
+        depends=['state'])
 
     @classmethod
     def __setup__(cls):
